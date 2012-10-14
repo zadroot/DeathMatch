@@ -1,0 +1,12 @@
+"Phrases"
+{
+	"Health Remaining"
+	{
+		"#format"		"{1:i}"
+		"ru"			"У вашего убийцы осталось {1} жизней."
+	}
+	"Attacker is dead"
+	{
+		"ru"			"Ваш убийца мертв."
+	}
+}
