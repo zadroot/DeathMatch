@@ -17,13 +17,11 @@
 #include <dodhooks>
 #include <sdkhooks>
 #include <sendproxy>
+#tryinclude <steamtools>
 
 // ====[ CONSTANTS ]===================================================
 #define PLUGIN_NAME        "DoD:S DeathMatch"
-#define PLUGIN_AUTHOR      "Root & Andresso"
-#define PLUGIN_DESCRIPTION "Adds deathmatch gameplay for DoD:S"
-#define PLUGIN_VERSION     "3.0"
-#define PLUGIN_CONTACT     "http://www.dodsplugins.com/"
+#define PLUGIN_VERSION     "3.0.1"
 
 #define DOD_MAXPLAYERS     33
 #define MAX_SPAWNPOINTS    32
@@ -68,10 +66,10 @@ new Handle:g_hRegenTimer,
 public Plugin:myinfo =
 {
 	name        = PLUGIN_NAME,
-	author      = PLUGIN_AUTHOR,
-	description = PLUGIN_DESCRIPTION,
+	author      = "Root & Andresso",
+	description = "Adds deathmatch gameplay for DoD:S",
 	version     = PLUGIN_VERSION,
-	url         = PLUGIN_CONTACT
+	url         = "http://dodsplugins.com/"
 };
 
 /* APLRes:AskPluginLoad2()
@@ -123,17 +121,10 @@ public OnPluginStart()
 	LoadConVars();
 	LoadEvents();
 	LoadOffsets();
-}
 
-/* OnGetGameDescription()
- *
- * When the game description is polled.
- * --------------------------------------------------------------------- */
-public Action:OnGetGameDescription(String:gameDesc[64])
-{
-	// Changes the game description from "Day of Defeat: Source" to "DoD:S DeathMatch")
-	Format(gameDesc, sizeof(gameDesc), PLUGIN_NAME);
-	return Plugin_Changed;
+	#if defined _steamtools_included
+	Steam_SetGameDescription(PLUGIN_NAME);
+	#endif
 }
 
 /* OnMapStart()

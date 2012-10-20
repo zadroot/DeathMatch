@@ -231,9 +231,7 @@ public Event_round_start(Handle:event, const String:name[], bool:dontBroadcast)
 	// Remove map objectives from the HUD (DoD Hooks)
 	SetNumControlPoints(0);
 
-	decl entity;
-
-	entity = -1;
+	new entity = -1;
 
 	static const String:entRemove[][] =
 	{
@@ -246,8 +244,6 @@ public Event_round_start(Handle:event, const String:name[], bool:dontBroadcast)
 		"func_teamblocker"
 	};
 
-	entity = -1;
-
 	// Loop through and delete all entities from the entity removal list
 	for (new i = 0; i < sizeof(entRemove); i++)
 	{
@@ -257,15 +253,11 @@ public Event_round_start(Handle:event, const String:name[], bool:dontBroadcast)
 		}
 	}
 
-	entity = -1;
-
 	// Server crashes if you remove a bomb dispenser, so we disable it instead
 	if ((entity = FindEntityByClassname(entity, "dod_bomb_dispenser")) != -1)
 	{
 		AcceptEntityInput(entity, "Disable");
 	}
-
-	entity = -1;
 
 	// Hide the flag model
 	while ((entity = FindEntityByClassname(entity, "dod_control_point")) != -1)
