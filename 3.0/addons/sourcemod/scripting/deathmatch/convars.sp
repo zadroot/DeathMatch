@@ -104,14 +104,10 @@ UpdateModeConVars()
 	static Handle:conVarFriendlyFireSafeZone;
 
 	if (!conVarFriendlyFire)
-	{
 		conVarFriendlyFire = FindConVar("mp_friendlyfire");
-	}
 
 	if (!conVarFriendlyFireSafeZone)
-	{
 		conVarFriendlyFireSafeZone = FindConVar("dod_friendlyfiresafezone");
-	}
 
 	if (g_ConVars[ConVar_Mode][Value])
 	{

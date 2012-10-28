@@ -1,13 +1,16 @@
 /**
- * DeathMatch plugin for Day of Defeat: Source by Root
- * Special thanks to Andresso for help!
- *
- * Version 3.0
- *
- * Changelog & more info at http://goo.gl/4nKhJ
+* DoD:S DeathMatch by Root
+*
+* Description:
+*   Adds DeathMatch gameplay for Day of Defeat: Source.
+*   Special thanks to Andersso for help!
+*
+*
+* Version 3.0.1
+* Changelog & more info at http://goo.gl/4nKhJ
 */
 
-#pragma semicolon 1 // Force strict semicolon mode.
+#pragma semicolon 1 // Force strict semicolon mode
 
 #define REQUIRE_EXTENSIONS
 
@@ -20,18 +23,18 @@
 #tryinclude <steamtools>
 
 // ====[ CONSTANTS ]===================================================
-#define PLUGIN_NAME        "DoD:S DeathMatch"
-#define PLUGIN_VERSION     "3.0.1"
+#define PLUGIN_NAME      "DoD:S DeathMatch"
+#define PLUGIN_VERSION   "3.0.1"
 
-#define DOD_MAXPLAYERS     33
-#define MAX_SPAWNPOINTS    32
+#define DOD_MAXPLAYERS   33
+#define MAX_SPAWNPOINTS  32
 
-#define AMMO_OFFSET_COLT   4
-#define AMMO_OFFSET_P38    8
+#define AMMO_OFFSET_COLT 4
+#define AMMO_OFFSET_P38  8
 
 enum
 {
-	Team_Unassigned = 0,
+	Team_Unassigned,
 	Team_Spectator,
 	Team_Allies,
 	Team_Axis,
@@ -40,14 +43,13 @@ enum
 
 enum
 {
-	SpawnPointTeam_Allies = 0,
+	SpawnPointTeam_Allies,
 	SpawnPointTeam_Axis,
-
 	SpawnPointTeam_Size
 };
 
 // ====[ VARIABLES ]===================================================
-new Handle:g_hRegenTimer,
+new Handle:g_hRegenTimer = INVALID_HANDLE,
 	bool:g_bLateLoad,
 	bool:g_bHealthRegen[DOD_MAXPLAYERS],
 	Float:g_fHealthRegenDelay[DOD_MAXPLAYERS],
@@ -72,6 +74,7 @@ public Plugin:myinfo =
 	url         = "http://dodsplugins.com/"
 };
 
+
 /* APLRes:AskPluginLoad2()
  *
  * Called before the plugin starts up.
@@ -89,7 +92,7 @@ public OnPluginStart()
 {
 	LoadTranslations("deathmatch.phrases");
 
-	// Create and exec dod_deathmatch.cfg file from cfg/sourcemod folder
+	// Create and exec dod_deathmatch config file from sourcemod
 	AutoExecConfig(true, "dod_deathmatch");
 
 	HookUserMessage(GetUserMessageId("HintText"), Hook_HintText, true);
@@ -137,6 +140,7 @@ public OnMapStart()
 
 	new playerResource = FindEntityByClassname(-1, "dod_player_manager");
 
+	// Hook CPlayerResource entity if avalible
 	if (playerResource != -1)
 	{
 		SDKHook(playerResource, SDKHook_ThinkPost, OnPlayerResourceThinkPost);
@@ -154,7 +158,7 @@ public OnMapStart()
 
 /* OnConfigsExecuted()
  *
- * When game configurations (e.g., map-specific configs) are executed.
+ * When game configurations (e.g. map-specific configs) are executed.
  * --------------------------------------------------------------------- */
 public OnConfigsExecuted()
 {
@@ -375,10 +379,11 @@ public Action:Timer_RegenHealth(Handle:timer)
 			{
 				GiveHealth(i, g_ConVars[ConVar_RegenHP][Value]);
 			}
+
 			// If it has gone past the delay, start the health regeneration
 			else if (g_fHealthRegenDelay[i] && g_fHealthRegenDelay[i] < GetGameTime())
 			{
-				g_bHealthRegen[i] = true;
+				g_bHealthRegen[i]      = true;
 				g_fHealthRegenDelay[i] = 0.0;
 			}
 		}

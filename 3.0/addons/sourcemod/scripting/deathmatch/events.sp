@@ -1,6 +1,6 @@
 /**
  * ---------------------------------------------------------------------
- *		______                  __
+ *	    ______                  __
  *	   / ____/_   _____  ____  / /______
  *	  / __/  | | / / _ \/ __ \/ __/ ___/
  *	 / /___  | |/ /  __/ / / / /_(__  )
@@ -348,10 +348,7 @@ public Action:Timer_RefillClip(Handle:timer, any:client)
 							SetEntData(weapon, g_iOffset_Clip, clipSizes[x], _, true);
 
 							// We are only are going to refill the ammo on two weapons
-							if (++weaponsFound >= 2)
-							{
-								break;
-							}
+							if (++weaponsFound >= 2) break;
 						}
 					}
 				}
