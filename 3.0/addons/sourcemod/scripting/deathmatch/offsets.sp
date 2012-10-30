@@ -1,15 +1,15 @@
 /**
  * ---------------------------------------------------------------------
- *	   ____  ________          __
- *	  / __ \/ __/ __/_______  / /______
- *	 / / / / /_/ /_/ ___/ _ \/ __/ ___/
- *	/ /_/ / __/ __(__  )  __/ /_(__  )
- *	\____/_/ /_/ /____/\___/\__/____/
+ *     ____  ________          __
+ *    / __ \/ __/ __/_______  / /______
+ *   / / / / /_/ /_/ ___/ _ \/ __/ ___/
+ *  / /_/ / __/ __(__  )  __/ /_(__  )
+ *  \____/_/ /_/ /____/\___/\__/____/
  *
  * ---------------------------------------------------------------------
 */
 
-new g_iOffset_Team,
+new	g_iOffset_Team,
 	g_iOffset_Alive,
 	g_iOffset_TeamNum,
 	g_iOffset_Health,
@@ -42,7 +42,7 @@ GetSendPropOffset(const String:serverClass[64], const String:propName[64])
 
 	if (!offset)
 	{
-		SetFailState("Unable to find offset: \"%s:%s\"!", serverClass, propName);
+		SetFailState("Unable to find offset: \"%s::%s\"!", serverClass, propName);
 	}
 
 	return offset;

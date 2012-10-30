@@ -14,7 +14,7 @@
 
 #define REQUIRE_EXTENSIONS
 
-// ====[ INCLUDES ]====================================================
+// ====[ INCLUDES ]=====================================================
 #include <sourcemod>
 #include <sdktools>
 #include <dodhooks>
@@ -22,7 +22,7 @@
 #include <sendproxy>
 #tryinclude <steamtools>
 
-// ====[ CONSTANTS ]===================================================
+// ====[ CONSTANTS ]====================================================
 #define PLUGIN_NAME      "DoD:S DeathMatch"
 #define PLUGIN_VERSION   "3.0.1"
 
@@ -48,8 +48,8 @@ enum
 	SpawnPointTeam_Size
 };
 
-// ====[ VARIABLES ]===================================================
-new Handle:g_hRegenTimer = INVALID_HANDLE,
+// ====[ VARIABLES ]====================================================
+new	Handle:g_hRegenTimer = INVALID_HANDLE,
 	bool:g_bLateLoad,
 	bool:g_bHealthRegen[DOD_MAXPLAYERS],
 	Float:g_fHealthRegenDelay[DOD_MAXPLAYERS],
@@ -57,7 +57,7 @@ new Handle:g_hRegenTimer = INVALID_HANDLE,
 	Float:g_vecSpawnPointOrigin[SpawnPointTeam_Size][MAX_SPAWNPOINTS][3],
 	g_iNumSpawnPoints[SpawnPointTeam_Size];
 
-// ====[ PLUGIN ]======================================================
+// ====[ PLUGIN ]=======================================================
 #include "deathmatch/offsets.sp"
 #include "deathmatch/misc.sp"
 #include "deathmatch/convars.sp"
@@ -92,7 +92,7 @@ public OnPluginStart()
 {
 	LoadTranslations("deathmatch.phrases");
 
-	// Create and exec dod_deathmatch config file from sourcemod
+	// Create and exec dod_deathmatch configuration file
 	AutoExecConfig(true, "dod_deathmatch");
 
 	HookUserMessage(GetUserMessageId("HintText"), Hook_HintText, true);
@@ -113,7 +113,7 @@ public OnPluginStart()
 			}
 		}
 
-		// If the round is active, restart the round
+		// If the round is active - restart the round
 		if (_:GameRules_GetRoundState() == DoDRoundState_RoundRunning)
 		{
 			SetRoundState(DoDRoundState_Restart);
@@ -140,7 +140,7 @@ public OnMapStart()
 
 	new playerResource = FindEntityByClassname(-1, "dod_player_manager");
 
-	// Hook CPlayerResource entity if avalible
+	// Hook CDODPlayerResource entity if avalible
 	if (playerResource != -1)
 	{
 		SDKHook(playerResource, SDKHook_ThinkPost, OnPlayerResourceThinkPost);

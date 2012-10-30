@@ -1,17 +1,17 @@
 /**
  * ---------------------------------------------------------------------
- *	   ______
- *	  / ____/___  ____  _   __ _______________
- *	 / /   / __ \/ __ \| | / / __ `/ ___/ ___/
- *	/ /___/ /_/ / / / /| |/ / /_/ / /  (__  )
- *	\____/\____/_/ /_/ |___/\__,_/_/  /____/
+ *     ______
+ *    / ____/___  ____  _   __ _______________
+ *   / /   / __ \/ __ \| | / / __ `/ ___/ ___/
+ *  / /___/ /_/ / / / /| |/ / /_/ / /  (__  )
+ *  \____/\____/_/ /_/ |___/\__,_/_/  /____/
  *
  * ---------------------------------------------------------------------
 */
 
 enum
 {
-	ConVar_Mode = 0,
+	ConVar_Mode,
 	ConVar_Pistols,
 	ConVar_Grenades,
 	ConVar_KillAmmo,
@@ -29,7 +29,7 @@ enum
 
 enum ValueType
 {
-	ValueType_Int = 0,
+	ValueType_Int,
 	ValueType_Bool,
 	ValueType_Float
 };
@@ -88,9 +88,9 @@ UpdateConVarValue(conVar)
 {
 	switch (g_ConVars[conVar][Type])
 	{
-		case ValueType_Int:    g_ConVars[conVar][Value] = GetConVarInt(g_ConVars[conVar][ConVarHandle]);
-		case ValueType_Bool:   g_ConVars[conVar][Value] = GetConVarBool(g_ConVars[conVar][ConVarHandle]);
-		case ValueType_Float:  g_ConVars[conVar][Value] = GetConVarFloat(g_ConVars[conVar][ConVarHandle]);
+		case ValueType_Int:   g_ConVars[conVar][Value] = GetConVarInt(g_ConVars[conVar][ConVarHandle]);
+		case ValueType_Bool:  g_ConVars[conVar][Value] = GetConVarBool(g_ConVars[conVar][ConVarHandle]);
+		case ValueType_Float: g_ConVars[conVar][Value] = GetConVarFloat(g_ConVars[conVar][ConVarHandle]);
 	}
 }
 
