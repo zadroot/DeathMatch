@@ -1,0 +1,27 @@
+"Phrases"
+{
+	"Health Remaining"
+	{
+		"fr"	"Votre attaquant avais {1} HP restant(s)."
+	}
+	"Attacker is dead"
+	{
+		"fr"	"Votre attaquant est mort."
+	}
+	"SP created"
+	{
+		"fr"	"Spawn #{1} créé pour l'équipe {2}."
+	}
+	"SP failed"
+	{
+		"fr"	"Vous ne pouvez pas ajouter de Spawns supplémentaires. Max: {1}"
+	}
+	"SP usage"
+	{
+		"fr"	"Usage: sm_addsp <allies/axis>"
+	}
+	"SP saved"
+	{
+		"fr"	"Le Spawn pour {1} a été sauvegardé!"
+	}
+}
