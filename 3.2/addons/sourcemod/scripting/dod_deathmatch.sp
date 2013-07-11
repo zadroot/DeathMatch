@@ -14,8 +14,8 @@
 
 // ====[ INCLUDES ]=======================================================
 #include <sdktools>
-#include <dodhooks>
 #include <sdkhooks>
+#include <dodhooks>
 #include <sendproxy>
 #undef REQUIRE_EXTENSIONS
 #tryinclude <steamtools>
@@ -134,21 +134,21 @@ public OnConfigsExecuted()
 {
 	LoadConfig();
 
-	new playerResource = FindEntityByClassname(-1, "dod_player_manager");
+	new playerResource = GetPlayerResourceEntity();
 
-	// Hook CDODPlayerResource entity if avalible, otherwise disable plugin at all
+	// Hook DT_PlayerResource entity if avaliable, otherwise disable plugin...
 	if (playerResource != -1)
 	{
 		SDKHook(playerResource, SDKHook_ThinkPost, OnPlayerResourceThinkPost);
 	}
 	else
 	{
-		SetFailState("Unable to find entity: \"dod_player_manager\"!");
+		SetFailState("Unable to find resource entity: \"dod_player_manager\"!");
 	}
 
 	g_hRegenTimer = CreateTimer(g_ConVars[ConVar_RegenTick][Value], Timer_RegenHealth, _, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 
-	// Load the sound file which played when a player is spawned
+	// Load the sound file which is played when a player is spawned
 	PrecacheSound("UI/gift_drop.wav");
 
 	#if defined _steamtools_included
@@ -215,7 +215,7 @@ public OnPlayerResourceThinkPost(entity)
 		{
 			new offset = GetArrayCell(playerArray, i) * 4;
 
-			// If the player is on top-16, set the player's team as allies, otherwise axis
+			// If the player is on top-16 in scoreboard, set the player's team as allies, otherwise axis
 			SetEntData(entity, g_iOffset_Team + offset, i <= 16 ? Team_Allies : Team_Axis);
 
 			// Set the player as dead (Hides all players from the minimap)

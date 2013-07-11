@@ -338,18 +338,15 @@ public Action:Timer_RefillClip(Handle:timer, any:client)
 				decl String:className[64];
 				GetEdictClassname(weapon, className, sizeof(className));
 
-				// Remove 'weapon_' from the classname to improve performance
-				if (ReplaceString(className, sizeof(className), "weapon_", NULL_STRING))
+				for (new x = 0; x < sizeof(weaponNames); x++)
 				{
-					for (new x = 0; x < sizeof(weaponNames); x++)
+					// Skip the first 7 characters in weapon string to avoid comparing the "weapon_" prefix
+					if (StrEqual(className[7], weaponNames[x]))
 					{
-						if (StrEqual(className, weaponNames[x]))
-						{
-							SetEntData(weapon, g_iOffset_Clip, clipSizes[x], _, true);
+						SetEntData(weapon, g_iOffset_Clip, clipSizes[x], _, true);
 
-							// We are only are going to refill the ammo on two weapons
-							if (++weaponsFound >= 2) break;
-						}
+						// We are only are going to refill the ammo on two weapons
+						if (++weaponsFound >= 2) break;
 					}
 				}
 			}

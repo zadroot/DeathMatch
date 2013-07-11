@@ -51,7 +51,7 @@ new g_ConVars[ConVar_Size][ConVar];
 LoadConVars()
 {
 	// Create convars
-	CreateConVar("deathmatch_version", PLUGIN_VERSION, PLUGIN_NAME, FCVAR_NOTIFY|FCVAR_PLUGIN|FCVAR_SPONLY);
+	CreateConVar("deathmatch_version", PLUGIN_VERSION, PLUGIN_NAME, FCVAR_NOTIFY|FCVAR_DONTRECORD);
 
 	AddConVar(ConVar_Mode,           ValueType_Bool,   CreateConVar("dm_mode",             "1",   "Sets the DeathMatch mode:\n0 = Team DeathMatch\n1 = Free For All", FCVAR_PLUGIN, true, 0.0, true, 1.0));
 	AddConVar(ConVar_Pistols,        ValueType_Bool,   CreateConVar("dm_pistols",          "1",   "Whether or not give pistols for Rifleman and Support classes",     FCVAR_PLUGIN, true, 0.0, true, 1.0));
