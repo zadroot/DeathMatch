@@ -37,9 +37,9 @@ public Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
 		if (g_ConVars[ConVar_Mode][Value])
 		{
 			// If FFA mode is active, get spawn points from both teams
-			for (new i = 0; i < SpawnPointTeam_Size; i++)
+			for (new i; i < SpawnPointTeam_Size; i++)
 			{
-				for (new x = 0; x < g_iNumSpawnPoints[i]; x++)
+				for (new x; x < g_iNumSpawnPoints[i]; x++)
 				{
 					if (TestSpawnPoint(g_vecSpawnPointOrigin[i][x]))
 					{
@@ -54,7 +54,7 @@ public Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
 			// If deathmatch mode is active, get team specific spawn points
 			new spawnPointTeam = GetClientTeam(client) - 2;
 
-			for (new x = 0; x < g_iNumSpawnPoints[spawnPointTeam]; x++)
+			for (new x; x < g_iNumSpawnPoints[spawnPointTeam]; x++)
 			{
 				if (TestSpawnPoint(g_vecSpawnPointOrigin[spawnPointTeam][x]))
 				{
@@ -101,14 +101,7 @@ public Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
 						RemoveWeapon(client, smoke);
 					}
 
-					if (team == Team_Allies)
-					{
-						GivePlayerItem(client, "weapon_amerknife");
-					}
-					else
-					{
-						GivePlayerItem(client, "weapon_spade");
-					}
+					GivePlayerItem(client, team == Team_Allies ? "weapon_amerknife" : "weapon_spade");
 				}
 			}
 		}
@@ -134,7 +127,7 @@ public Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
 
 		if (g_ConVars[ConVar_SpawnSound][Value])
 		{
-			EmitAmbientSound("UI/gift_drop.wav", vecOrigin);
+			EmitAmbientSound(RESPAWN_SOUND, vecOrigin);
 		}
 
 		g_bHealthRegen[client] = false;
@@ -182,16 +175,15 @@ public Event_player_death(Handle:event, const String:name[], bool:dontBroadcast)
 				LogError("Unable to find offset: \"m_iFrags\"!");
 			}
 
+			// Increase frags count by 2 due to 'teamkill'
 			SetEntData(attacker, fragsOffset, GetEntData(attacker, fragsOffset) + 2);
 		}
-
-		new attackerHealth = GetEntData(attacker, g_iOffset_Health);
 
 		if (g_ConVars[ConVar_ShowHP][Value])
 		{
 			if (IsPlayerAlive(attacker))
 			{
-				PrintToChat(client, "\x05[DM]\x01 %t", "Health Remaining", attackerHealth);
+				PrintToChat(client, "\x05[DM]\x01 %t", "Health Remaining", GetClientHealth(attacker));
 			}
 			else
 			{
@@ -205,7 +197,7 @@ public Event_player_death(Handle:event, const String:name[], bool:dontBroadcast)
 			g_fHealthRegenDelay[attacker] = 0.0;
 		}
 
-		if (g_ConVars[ConVar_KillHeal][Value] > 0)
+		if (g_ConVars[ConVar_KillHeal][Value])
 		{
 			GiveHealth(attacker, g_ConVars[ConVar_KillHeal][Value]);
 		}
@@ -244,7 +236,7 @@ public Event_round_start(Handle:event, const String:name[], bool:dontBroadcast)
 		};
 
 		// Loop through and delete all entities from the entity removal list
-		for (new i = 0; i < sizeof(entRemove); i++)
+		for (new i; i < sizeof(entRemove); i++)
 		{
 			while ((entity = FindEntityByClassname(entity, entRemove[i])) != -1)
 			{
@@ -274,6 +266,7 @@ bool:TestSpawnPoint(const Float:vecOrigin[3])
 {
 	TR_TraceHull(vecOrigin, vecOrigin, Float:{ -16.0, -16.0, 0.0 }, Float:{ 16.0, 16.0, 82.0 }, MASK_PLAYERSOLID);
 
+	// Return true if empty
 	return !TR_DidHit();
 }
 
@@ -283,7 +276,7 @@ bool:TestSpawnPoint(const Float:vecOrigin[3])
  * --------------------------------------------------------------------- */
 public Action:Timer_RefillClip(Handle:timer, any:client)
 {
-	if ((client = GetClientOfUserId(client)) > 0)
+	if ((client = GetClientOfUserId(client)))
 	{
 		// Make sure that the client is valid
 		static const clipSizes[] =
@@ -328,8 +321,8 @@ public Action:Timer_RefillClip(Handle:timer, any:client)
 
 		new weaponsFound;
 
-		// Loop through all the players weapons
-		for (new i = 0; i < 48; i++)
+		// Loop through all the players weapons (47 in DoD:S)
+		for (new i; i < 48; i++)
 		{
 			new weapon = GetEntDataEnt2(client, g_iOffset_MyWeapons + (i * 4));
 
@@ -338,7 +331,7 @@ public Action:Timer_RefillClip(Handle:timer, any:client)
 				decl String:className[64];
 				GetEdictClassname(weapon, className, sizeof(className));
 
-				for (new x = 0; x < sizeof(weaponNames); x++)
+				for (new x; x < sizeof(weaponNames); x++)
 				{
 					// Skip the first 7 characters in weapon string to avoid comparing the "weapon_" prefix
 					if (StrEqual(className[7], weaponNames[x]))
@@ -361,7 +354,7 @@ public Action:Timer_RefillClip(Handle:timer, any:client)
 public Action:Timer_Respawn(Handle:timer, any:client)
 {
 	// Make sure that the client is valid
-	if ((client = GetClientOfUserId(client)) > 0 && GetPlayerClass(client) != PlayerClass_None)
+	if ((client = GetClientOfUserId(client)) && GetPlayerClass(client) != PlayerClass_None)
 	{
 		RespawnPlayer(client, false);
 	}

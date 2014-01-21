@@ -17,13 +17,13 @@ static const String:g_szSpawnPointTeams[][] = { "allies", "axis" };
  * --------------------------------------------------------------------- */
 LoadConfig()
 {
-	g_iNumSpawnPoints[SpawnPointTeam_Allies] = 0;
+	g_iNumSpawnPoints[SpawnPointTeam_Allies] =
 	g_iNumSpawnPoints[SpawnPointTeam_Axis]   = 0;
 
-	decl String:mapName[64];
+	decl String:mapName[PLATFORM_MAX_PATH];
 	GetCurrentMap(mapName, sizeof(mapName));
 
-	decl String:path[256];
+	decl String:path[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, path, sizeof(path), "configs/deathmatch/%s.cfg", mapName);
 
 	if (FileExists(path))
@@ -32,7 +32,7 @@ LoadConfig()
 
 		FileToKeyValues(kv, path);
 
-		for (new i = 0; i < sizeof(g_szSpawnPointTeams); i++)
+		for (new i; i < sizeof(g_szSpawnPointTeams); i++)
 		{
 			if (KvJumpToKey(kv, g_szSpawnPointTeams[i]))
 			{
@@ -78,7 +78,7 @@ SaveConfig()
 {
 	new Handle:kv = CreateKeyValues("Spawns");
 
-	for (new i = 0; i < sizeof(g_szSpawnPointTeams); i++)
+	for (new i; i < sizeof(g_szSpawnPointTeams); i++)
 	{
 		if (KvJumpToKey(kv, g_szSpawnPointTeams[i], true))
 		{
@@ -86,7 +86,7 @@ SaveConfig()
 
 			new numSpawnPoints = g_iNumSpawnPoints[i];
 
-			for (new x = 0; x < numSpawnPoints; x++)
+			for (new x; x < numSpawnPoints; x++)
 			{
 				decl String:keyName[8];
 				IntToString(x, keyName, sizeof(keyName));
@@ -104,10 +104,10 @@ SaveConfig()
 		KvRewind(kv);
 	}
 
-	decl String:mapName[64];
+	decl String:mapName[PLATFORM_MAX_PATH];
 	GetCurrentMap(mapName, sizeof(mapName));
 
-	decl String:path[256];
+	decl String:path[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, path, sizeof(path), "configs/deathmatch/%s.cfg", mapName);
 
 	if (!KeyValuesToFile(kv, path))

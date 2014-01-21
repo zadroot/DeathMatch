@@ -3,14 +3,11 @@
 *
 * Description:
 *   Adds DeathMatch gameplay for Day of Defeat: Source
-*   Special thanks to Andersso for help!
+*   Special thanks to Andersso for helping me out with version 2.0!
 *
 * Version 3.2
 * Changelog & more info at http://goo.gl/4nKhJ
 */
-
-// ====[ SEMICOLON ]======================================================
-#pragma semicolon 1
 
 // ====[ INCLUDES ]=======================================================
 #include <sdktools>
@@ -23,6 +20,8 @@
 // ====[ CONSTANTS ]======================================================
 #define PLUGIN_NAME      "DoD:S DeathMatch"
 #define PLUGIN_VERSION   "3.2"
+
+#define RESPAWN_SOUND    "UI/gift_drop.wav"
 
 #define DOD_MAXPLAYERS   33
 #define MAX_SPAWNPOINTS  32
@@ -67,10 +66,10 @@ public Plugin:myinfo =
 {
 	name        = PLUGIN_NAME,
 	author      = "Root & Andersso",
-	description = "Adds deathmatch gameplay for DoD:S",
+	description = "Adds deathmatch gameplay for Day of Defeat: Source",
 	version     = PLUGIN_VERSION,
 	url         = "http://dodsplugins.com/"
-};
+}
 
 
 /* APLRes:AskPluginLoad2()
@@ -90,13 +89,12 @@ public OnPluginStart()
 {
 	if (g_bLateLoad)
 	{
-		// Apply the hooks on all players
+		// Apply the hooks on all players in late load
 		for (new i = 1; i <= MaxClients; i++)
 		{
 			if (IsClientInGame(i))
 			{
 				SDKHook(i, SDKHook_ShouldCollide, OnShouldCollide);
-
 				SendProxy_Hook(i, "m_iTeamNum", Prop_Int, Hook_TeamNum);
 			}
 		}
@@ -134,26 +132,20 @@ public OnConfigsExecuted()
 {
 	LoadConfig();
 
-	new playerResource = GetPlayerResourceEntity();
-
-	// Hook DT_PlayerResource entity if avaliable, otherwise disable plugin...
-	if (playerResource != -1)
-	{
-		SDKHook(playerResource, SDKHook_ThinkPost, OnPlayerResourceThinkPost);
-	}
-	else
+	// Hook DT_PlayerResource entity if avaliable, or disable plugin
+	if (!SDKHookEx(GetPlayerResourceEntity(), SDKHook_ThinkPost, OnPlayerResourceThinkPost))
 	{
 		SetFailState("Unable to find resource entity: \"dod_player_manager\"!");
 	}
 
-	g_hRegenTimer = CreateTimer(g_ConVars[ConVar_RegenTick][Value], Timer_RegenHealth, _, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+	g_hRegenTimer = CreateTimer(g_ConVars[ConVar_RegenTick][Value], Timer_RegenHealth, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 
 	// Load the sound file which is played when a player is spawned
-	PrecacheSound("UI/gift_drop.wav");
+	PrecacheSound(RESPAWN_SOUND);
 
-	#if defined _steamtools_included
+#if defined _steamtools_included
 	if (LibraryExists("SteamTools")) Steam_SetGameDescription(PLUGIN_NAME);
-	#endif
+#endif
 
 	UpdateModeConVars();
 }
@@ -167,7 +159,6 @@ public OnClientPostAdminCheck(client)
 	if (!IsClientSourceTV(client))
 	{
 		SDKHook(client, SDKHook_ShouldCollide, OnShouldCollide);
-
 		SendProxy_Hook(client, "m_iTeamNum", Prop_Int, Hook_TeamNum);
 	}
 }
@@ -199,9 +190,9 @@ public OnPlayerResourceThinkPost(entity)
 {
 	if (g_ConVars[ConVar_Mode][Value])
 	{
-		new Handle:playerArray = CreateArray();
+		new Handle:playerArray = CreateArray(), i;
 
-		for (new i = 1; i <= MaxClients; i++)
+		for (i = 1; i <= MaxClients; i++)
 		{
 			if (IsClientInGame(i) && GetClientTeam(i) > Team_Spectator)
 			{
@@ -211,7 +202,7 @@ public OnPlayerResourceThinkPost(entity)
 
 		SortADTArrayCustom(playerArray, SortArray);
 
-		for (new i = 0; i < GetArraySize(playerArray); i++)
+		for (i = 0; i < GetArraySize(playerArray); i++)
 		{
 			new offset = GetArrayCell(playerArray, i) * 4;
 
@@ -244,9 +235,9 @@ public Action:Hook_HintText(UserMsg:msg_id, Handle:bf, const players[], playersN
 	decl String:hintName[64];
 	BfReadString(bf, hintName, sizeof(hintName));
 
-	for (new i = 0; i < sizeof(hintMessages); i++)
+	for (new i; i < sizeof(hintMessages); i++)
 	{
-		if (StrEqual(hintName, hintMessages[i]))
+		if (StrEqual(hintName, hintMessages[i], false))
 		{
 			return Plugin_Handled;
 		}
@@ -276,7 +267,6 @@ public Action:Hook_TeamNum(client, const String:propName[], &value, element)
 		if (IsPlayerAlive(client))
 		{
 			value = Team_Custom;
-
 			return Plugin_Changed;
 		}
 	}

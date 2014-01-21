@@ -149,7 +149,7 @@ UpdateModeConVars()
  * --------------------------------------------------------------------- */
 public OnConVarChange(Handle:conVar, const String:oldValue[], const String:newValue[])
 {
-	for (new i = 0; i < ConVar_Size; i++)
+	for (new i; i < ConVar_Size; i++)
 	{
 		if (conVar == g_ConVars[i][ConVarHandle])
 		{
@@ -172,7 +172,7 @@ public OnConVarChange(Handle:conVar, const String:oldValue[], const String:newVa
 				{
 					CloseHandle(g_hRegenTimer);
 
-					g_hRegenTimer = CreateTimer(g_ConVars[ConVar_RegenTick][Value], Timer_RegenHealth, _, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+					g_hRegenTimer = CreateTimer(g_ConVars[ConVar_RegenTick][Value], Timer_RegenHealth, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 				}
 			}
 

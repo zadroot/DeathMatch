@@ -15,7 +15,7 @@
  * --------------------------------------------------------------------- */
 GiveHealth(client, amount)
 {
-	new health = GetEntData(client, g_iOffset_Health) + amount;
+	new health = GetClientHealth(client) + amount;
 
 	// If the regen would give the client more than their max hp, just set it to max and disable health regeneration
 	if (health > 100)
@@ -25,7 +25,7 @@ GiveHealth(client, amount)
 		g_bHealthRegen[client] = false;
 	}
 
-	SetEntData(client, g_iOffset_Health, health, _, true);
+	SetEntityHealth(client, health);
 }
 
 /* RemoveWeapon()

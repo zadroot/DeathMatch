@@ -27,7 +27,7 @@ public Action:Command_AddSpawnPoint(client, numArgs)
 {
 	if (client && IsPlayerAlive(client))
 	{
-		if (numArgs >= 1)
+		if (0 < numArgs < 2)
 		{
 			decl String:arg[16];
 			GetCmdArg(1, arg, sizeof(arg));
@@ -37,13 +37,11 @@ public Action:Command_AddSpawnPoint(client, numArgs)
 			if (StrEqual(arg, "allies", false))
 			{
 				spawnPointTeam = SpawnPointTeam_Allies;
-
 				ReplyToCommand(client, "\x05[DM]\x01 %t", "SP created", g_iNumSpawnPoints[spawnPointTeam], arg);
 			}
 			else if (StrEqual(arg, "axis", false))
 			{
 				spawnPointTeam = SpawnPointTeam_Axis;
-
 				ReplyToCommand(client, "\x05[DM]\x01 %t", "SP created", g_iNumSpawnPoints[spawnPointTeam], arg);
 			}
 
@@ -52,7 +50,6 @@ public Action:Command_AddSpawnPoint(client, numArgs)
 				if (g_iNumSpawnPoints[spawnPointTeam] >= MAX_SPAWNPOINTS)
 				{
 					ReplyToCommand(client, "\x05[DM]\x01 %t", "SP failed", MAX_SPAWNPOINTS);
-
 					return Plugin_Handled;
 				}
 
@@ -84,7 +81,7 @@ public Action:Command_AddSpawnPoint(client, numArgs)
  * --------------------------------------------------------------------- */
 public Action:Command_SaveSpawnPoints(client, numArgs)
 {
-	decl String:mapName[64];
+	decl String:mapName[PLATFORM_MAX_PATH];
 	GetCurrentMap(mapName, sizeof(mapName));
 
 	ReplyToCommand(client, "\x05[DM]\x01 %t", "SP saved", mapName);
