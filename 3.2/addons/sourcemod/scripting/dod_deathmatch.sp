@@ -292,8 +292,8 @@ public Action:Hook_VGUIMenu(UserMsg:msgId, Handle:bf, const players[], numPlayer
 
 		if (StrEqual(buffer, "info"))
 		{
-			// Loop until the msg key is found
-			while (BfGetNumBytesLeft(bf) != 0)
+			// Loop until the msg key will be found
+			while (BfGetNumBytesLeft(bf))
 			{
 				BfReadString(bf, buffer, sizeof(buffer));
 

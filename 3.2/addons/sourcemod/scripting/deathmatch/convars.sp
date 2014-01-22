@@ -115,7 +115,7 @@ UpdateModeConVars()
 	{
 		// It's FFA, enable friendlyfire!
 		SetConVarBool(conVarFriendlyFire, true);
-		SetConVarInt(conVarFriendlyFireSafeZone, false);
+		SetConVarBool(conVarFriendlyFireSafeZone, false);
 
 		// Workaround collision
 		for (new i = 1; i <= MaxClients; i++)
