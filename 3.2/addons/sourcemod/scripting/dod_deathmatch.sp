@@ -87,6 +87,23 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:lateLoad, String:error[], err_m
  * ----------------------------------------------------------------------- */
 public OnPluginStart()
 {
+	// Initialize all the stuff
+	LoadOffsets();
+	LoadCommands();
+	LoadConVars();
+	LoadEvents();
+
+	LoadTranslations("deathmatch.phrases");
+
+	// Create and exec dod_deathmatch configuration file
+	AutoExecConfig(true, "dod_deathmatch");
+
+	// Hook hint tutorials for FFA
+	HookUserMessage(GetUserMessageId("HintText"), Hook_HintText, true);
+	HookUserMessage(GetUserMessageId("VGUIMenu"), Hook_VGUIMenu, true);
+
+	AddAmbientSoundHook(AmbientSHook:HookFlagSound);
+
 	if (g_bLateLoad)
 	{
 		// Apply the hooks on all players in late load
@@ -105,23 +122,6 @@ public OnPluginStart()
 			SetRoundState(DoDRoundState_Restart);
 		}
 	}
-
-	// Initialize all the stuff
-	LoadCommands();
-	LoadConVars();
-	LoadEvents();
-	LoadOffsets();
-
-	LoadTranslations("deathmatch.phrases");
-
-	// Create and exec dod_deathmatch configuration file
-	AutoExecConfig(true, "dod_deathmatch");
-
-	// Hook hint tutorials for FFA
-	HookUserMessage(GetUserMessageId("HintText"), Hook_HintText, true);
-	HookUserMessage(GetUserMessageId("VGUIMenu"), Hook_VGUIMenu, true);
-
-	AddAmbientSoundHook(AmbientSHook:HookFlagSound);
 }
 
 /* OnConfigsExecuted()

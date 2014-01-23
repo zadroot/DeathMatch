@@ -25,7 +25,8 @@ GiveHealth(client, amount)
 		g_bHealthRegen[client] = false;
 	}
 
-	SetEntityHealth(client, health);
+	// Faster than SetEntityHealth(client, health);
+	SetEntData(client, g_iOffset_Health, health, _, true);
 }
 
 /* RemoveWeapon()

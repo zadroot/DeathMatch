@@ -12,6 +12,7 @@
 new	g_iOffset_Team,
 	g_iOffset_Alive,
 	g_iOffset_TeamNum,
+	g_iOffset_Health,
 	g_iOffset_Ammo,
 	g_iOffset_Clip,
 	g_iOffset_MyWeapons;
@@ -24,6 +25,7 @@ LoadOffsets()
 {
 	g_iOffset_Team      = FindSendPropOffsEx("CDODPlayerResource", "m_iTeam");
 	g_iOffset_Alive     = FindSendPropOffsEx("CDODPlayerResource", "m_bAlive");
+	g_iOffset_Health    = FindSendPropOffsEx("CBasePlayer",        "m_iHealth");
 	g_iOffset_TeamNum   = FindSendPropOffsEx("CBaseEntity",        "m_iTeamNum");
 	g_iOffset_Ammo      = FindSendPropOffsEx("CBasePlayer",        "m_iAmmo");
 	g_iOffset_Clip      = FindSendPropOffsEx("CBaseCombatWeapon",  "m_iClip1");
